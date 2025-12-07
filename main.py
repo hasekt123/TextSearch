@@ -1,16 +1,48 @@
-# This is a sample Python script.
+import json
+import os
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from parallel_search import run_search
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def load_config(path: str = "config.json") -> dict:
+    print(f"[MAIN] Načítám konfiguraci ze souboru: {path}")
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    if not os.path.isfile(path):
+        raise FileNotFoundError(f"Konfigurační soubor '{path}' neexistuje.")
+
+    with open(path, "r", encoding="utf-8") as f:
+        config = json.load(f)
+
+    print("[MAIN] Konfigurace úspěšně načtena.")
+    return config
+
+
+def main():
+    # 1) načtení configu
+    try:
+        config = load_config("config.json")
+    except FileNotFoundError as e:
+        print(f"[MAIN] CHYBA: {e}")
+        return
+    except json.JSONDecodeError as e:
+        print(f"[MAIN] CHYBA: config.json není validní JSON: {e}")
+        return
+
+    root_directory = config.get("root_directory", ".")
+    search_text = config.get("search_text", "")
+    num_workers = int(config.get("num_workers", 2))
+    allowed_extensions = config.get("allowed_extensions", [".txt"])
+
+    print("[MAIN] Načtené hodnoty z konfigurace:")
+    print(f"  root_directory   = {root_directory}")
+    print(f"  search_text      = {search_text!r}")
+    print(f"  num_workers      = {num_workers}")
+    print(f"  allowed_exts     = {allowed_extensions}")
+    print("--------------------------------------------------")
+
+    # 3) spuštění paralelního vyhledávání
+    run_search(root_directory, search_text, num_workers, allowed_extensions)
+
+
+if __name__ == "__main__":
+    main()

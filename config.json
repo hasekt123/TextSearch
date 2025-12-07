@@ -1,0 +1,6 @@
+{
+  "root_directory": "C:\\Users\\tomik\\Downloads\\dataText",
+  "search_text": "pes",
+  "num_workers": 2,
+  "allowed_extensions": [".txt", ".log", ".md"]
+}
