@@ -16,7 +16,6 @@ def load_config(path: str = "config.json") -> dict:
     print("[MAIN] Konfigurace úspěšně načtena.")
     return config
 
-
 def main():
     # 1) načtení configu
     try:
@@ -40,9 +39,7 @@ def main():
     print(f"  allowed_exts     = {allowed_extensions}")
     print("--------------------------------------------------")
 
-    # 3) spuštění paralelního vyhledávání
     run_search(root_directory, search_text, num_workers, allowed_extensions)
-
 
 if __name__ == "__main__":
     main()

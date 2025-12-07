@@ -4,18 +4,11 @@ from threading import Thread, Lock
 
 
 def produce_files(root_directory, allowed_extensions, file_queue):
-    """
-    PRODUCENT:
-    Projde složku a přidá všechny vhodné soubory do fronty.
-    """
     print(f"[PRODUCENT] Procházím složku: {root_directory}")
 
     if not os.path.isdir(root_directory):
         print(f"[PRODUCENT] Složka '{root_directory}' neexistuje.")
         return
-
-    # Přípony pro jistotu na malá písmena
-    allowed_extensions = [ext.lower() for ext in allowed_extensions]
 
     files_count = 0
 
@@ -37,10 +30,6 @@ def produce_files(root_directory, allowed_extensions, file_queue):
 
 
 def worker_thread(name, search_text, file_queue, results, results_lock):
-    """
-    WORKER (konsument):
-    Bere soubory z fronty, hledá v nich text a ukládá výsledky.
-    """
     print(f"[{name}] Startuji.")
 
     while True:
@@ -87,15 +76,7 @@ def worker_thread(name, search_text, file_queue, results, results_lock):
 
     print(f"[{name}] Ukončuji se.")
 
-
 def run_search(root_directory, search_text, num_workers, allowed_extensions):
-    """
-    Hlavní funkce:
-    - vytvoří frontu a sdílená data,
-    - spustí PRODUCENTA,
-    - spustí WORKERY,
-    - počká na dokončení a vypíše souhrn.
-    """
 
     print("==================================================")
     print(" Paralelní vyhledávač textu v souborech – START")
